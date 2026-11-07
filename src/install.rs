@@ -17,7 +17,7 @@ fn powershell(script: &str) -> Result<(), String> {
 }
 
 /// Run `<this exe> "<name>"` at every logon, also on battery, with no time limit.
-pub fn install(name: &str) -> Result<(), String> {
+pub fn install(name: &str, pulse_minutes: Option<u64>) -> Result<(), String> {
     if name.contains('"') {
         return Err("speaker name must not contain a double quote".into());
     }
@@ -33,7 +33,10 @@ pub fn install(name: &str) -> Result<(), String> {
          Register-ScheduledTask -TaskName {task} -Action $action -Trigger $trigger -Settings $settings -Force | Out-Null; \
          Start-ScheduledTask -TaskName {task}",
         exe = ps_quote(&exe.to_string_lossy()),
-        arg = ps_quote(&format!("\"{name}\"")),
+        arg = ps_quote(&match pulse_minutes {
+            Some(m) => format!("\"{name}\" --pulse {m}"),
+            None => format!("\"{name}\""),
+        }),
         task = ps_quote(TASK_NAME),
     );
     powershell(&script)

@@ -23,6 +23,10 @@ when you switch them back on. This tiny Windows tool fixes both:
 That registers a scheduled task that starts at every logon and starts it now.
 To remove it: `.\keep-speaker-awake.exe uninstall`.
 
+**Save speaker battery:** `.\keep-speaker-awake.exe install EMBERTON --pulse 3` plays silence for a few
+seconds every 3 minutes instead of continuously. Use a period shorter than your speaker's
+auto-off time (try 3, 5, 10 and keep the longest that works).
+
 Try it without installing: `.\keep-speaker-awake.exe EMBERTON` (add `--log file.txt` to see what it does).
 
 ## How it works
